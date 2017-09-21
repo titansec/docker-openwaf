@@ -44,8 +44,9 @@ RUN cd ${OPENWAF_PREFIX} \
     && git clone https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/configure ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION} \ 
-    && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
-    && rm -rf ${OPENWAF_PREFIX}/OpenWAF/lib/openresty
+    && cp -RP ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
+    && cd ${OPENWAF_PREFIX}/OpenWAF \ 
+    && make install 
     
 #3. install openresty
 RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \	
