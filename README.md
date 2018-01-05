@@ -3,7 +3,7 @@ Name
 
 OpenWAF
 
-Web application security protection system based on [openresty](https://github.com/openresty/openresty)
+第一个全方位开源的Web应用防护系统（WAF），更全面的防护功能，更多样的防护策略
 
 Table of Contents
 =================
@@ -13,7 +13,6 @@ Table of Contents
 * [Synopsis](#synopsis)
 * [Description](#description)
 * [Installation](#installation)
-* [Docker](#docker)
 * [Community](#community)
     * [English Mailing List](#english-mailing-list)
     * [Chinese Mailing List](#chinese-mailing-list)
@@ -29,19 +28,25 @@ Table of Contents
     * [Transformation Functions](#transformation-functions)
     * [Operators](#operators)
     * [Others](#others)
+* [Donation](#donation)
 
 Version
 =======
 
-This document describes OpenWAF v0.0.3.170103_beta released on 03 Jan 2017.
+This document describes OpenWAF v0.0.6 released on 26 Dec 2017.
 
 Docker Version  
 1. titansec/openwaf:0.0.1.161130_beta  
 &emsp;&emsp;SHA: 596dee9d2b9ce44d59dc445141f72b3607f9fbe6  
 &emsp;&emsp;https://github.com/titansec/OpenWAF/tree/596dee9d2b9ce44d59dc445141f72b3607f9fbe6  
-2. titansec/openwaf:0.0.3.170103_beta(titansec/openwaf:latest)  
+2. titansec/openwaf:0.0.3.170103_beta  
 &emsp;&emsp;SHA: 28ce1556250301f26f31b46d9cd9dde5a3b3f03f  
 &emsp;&emsp;https://github.com/titansec/OpenWAF/tree/28ce1556250301f26f31b46d9cd9dde5a3b3f03f  
+3. titansec/openwaf:v0.0.4  
+&emsp;&emsp;SHA: cdef1e0eac4f12c374feb6ac3c3c465610daaf6c  
+&emsp;&emsp;https://github.com/titansec/OpenWAF/tree/cdef1e0eac4f12c374feb6ac3c3c465610daaf6c  
+4. titansec/openwaf:v0.0.5(titansec/openwaf:latest)  
+&emsp;&emsp;https://github.com/titansec/OpenWAF/tree/f9a3a6cfb8b75b1f4af9f44477a5b64337a7da47  
 
 Synopsis
 ========
@@ -111,7 +116,7 @@ Synopsis
 Description
 ===========
 
-OpenWAF是基于openresty的Web应用防护系统（WAF），他基于nginx_lua API分析HTTP请求信息。OpenWAF由行为分析引擎和规则引擎两大功能引擎构成。其中规则引擎主要对单个请求进行分析，行为分析引擎主要负责跨请求信息追踪。
+OpenWAF是第一个全方位开源的Web应用防护系统（WAF），他基于nginx_lua API分析HTTP请求信息。OpenWAF由行为分析引擎和规则引擎两大功能引擎构成。其中规则引擎主要对单个请求进行分析，行为分析引擎主要负责跨请求信息追踪。
    
 规则引擎的启发来自[modsecurity](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual)及[freewaf(lua-resty-waf)](https://github.com/p0pr0ck5/lua-resty-waf)，将ModSecurity的规则机制用lua实现。基于规则引擎可以进行协议规范，自动工具，注入攻击，跨站攻击，信息泄露，异常请求等安全防护，支持动态添加规则，及时修补漏洞。
    
@@ -120,17 +125,21 @@ OpenWAF是基于openresty的Web应用防护系统（WAF），他基于nginx_lua 
 除了两大引擎之外，还包含统计，日志，攻击响应页面，接入规则等基础模块。除了已有的功能模块，OpenWAF还支持动态修改配置，
 动态添加第三方模块，使得在不重启引擎中断业务的条件下，升级防护。
 
-OpenWAF支持将上述功能封装为策略，不同的web application应用不同的策略来防护。策略还可分享供他人参考。
+OpenWAF支持将上述功能封装为策略，不同的web application应用不同的策略来防护。将来还会打造云平台，策略还可分享供他人参考。
 
 基础模块如下:
-* [静态配置管理器twaf_conf](https://github.com/titansec/openwaf_conf)
-* [日志twaf_log](https://github.com/titansec/openwaf_log)
-* [统计twaf_reqstat](https://github.com/titansec/openwaf_reqstat)
-* [核心层twaf_core](https://github.com/titansec/openwaf_core)
-* [接入规则twaf_access_rule](https://github.com/titansec/openwaf_access_rule)
+* [静态配置管理器 openwaf_conf](https://github.com/titansec/openwaf_conf)
+* [日志 openwaf_log](https://github.com/titansec/openwaf_log)
+* [统计 openwaf_reqstat](https://github.com/titansec/openwaf_reqstat)
+* [核心层 openwaf_core](https://github.com/titansec/openwaf_core)
+* [接入规则 openwaf_access_rule](https://github.com/titansec/openwaf_access_rule)
 
 功能模块如下:
-* [规则引擎twaf_secrules](https://github.com/titansec/openwaf_rule_engine)
+* [规则引擎 openwaf_rule_engine](https://github.com/titansec/openwaf_rule_engine)
+* [攻击响应页面 openwaf_attack_response](https://github.com/titansec/openwaf_attack_response)
+* [API openwaf_api](https://github.com/titansec/openwaf_api)
+* [防恶意爬虫 openwaf_anti_mal_crawler](https://github.com/titansec/openwaf_anti_mal_crawler)
+* [防CC openwaf_anti_cc](https://github.com/titansec/openwaf_anti_cc)
 
 详细配置文档及示例请看上述各模块文档
   
@@ -138,113 +147,8 @@ OpenWAF支持将上述功能封装为策略，不同的web application应用不�
 
 Installation
 ============
-若用[docker安装](#docker)，可省略步骤1-3
-```
-1. 下载openresty
-   详见 https://openresty.org/en/installation.html
-   
-   1.1 cd /opt
-   1.2 wget -c https://openresty.org/download/openresty-1.11.2.1.tar.gz
-   1.3 tar -xzvf openresty-1.11.2.1.tar.gz
 
-2. 安装OpenWAF
-   2.1 cd /opt
-   2.2 获取OpenWAF源文件
-       git clone https://github.com/titansec/OpenWAF.git
-   2.3 移动配置文件
-       mv /opt/OpenWAF/lib/openresty/ngx_openwaf.conf /etc
-   2.4 覆盖openresty的configure文件
-       mv /opt/OpenWAF/lib/openresty/configure /opt/openresty-1.11.2.1
-   2.5 移动第三方模块至openresty中
-       mv /opt/OpenWAF/lib/openresty/* /opt/openresty-1.11.2.1/bundle/
-   2.6 删除OpenWAF/lib/openresty目录
-       rm -rf /opt/OpenWAF/lib/openresty
-       
-3. 编译openresty
-   3.1 cd /opt/openresty-1.11.2.1/
-   3.2 ./configure --with-pcre-jit --with-ipv6 \
-                   --with-http_stub_status_module \
-                   --with-http_ssl_module \
-                   --with-http_realip_module \
-                   --with-http_sub_module
-   3.3 make && make install
-   
-4. 编辑配置文件
-   4.1 接入规则
-       vi /opt/OpenWAF/conf/twaf_access_rule.json
-       编辑域名，后端服务器地址等信息
-   4.2 日志服务器
-       vi /opt/OpenWAF/conf/twaf_default_conf.json
-       配置twaf_log日志接收服务器地址
-   
-5. 启动引擎
-   /usr/local/openresty/nginx/sbin/nginx -c /etc/ngx_openwaf.conf
-       
-Problems
-1. nginx:[emerg] at least OpenSSL 1.0.2e required but found OpenSSL xxx
-   更新OpenSSL版本至1.0.2e以上即可
-   
-   如：wget -c http://www.openssl.org/source/openssl-1.0.2h.tar.gz
-      ./config
-      make && make install
-      
-   PS: 
-      1. 查看当前openssl版本命令： openssl version
-      2. 若更新openssl后，版本未变，请详看http://www.cnblogs.com/songqingbo/p/5464620.html
-      3. 若依然提示版本问题，编译openresty时带上--with-openssl=/path/to/openssl-xxx/
-      
-2. 提示找不到GeoIP.h
-   
-   apt-get install libgeoip-dev
-   
-3. 提示找不到swig
-
-   apt-get install swig
-   
-4. 提示PCRE不支持JIT 
-   
-   编译pcre时，带上--enable-jit参数
-```
-
-[Back to TOC](#table-of-contents)
-
-Docker
-======
-```
-1. pull docker images from repository
-   docker pull titansec/openwaf
-
-2. start-up docker
-   2.1 docker run, named openwaf
-       docker run -d -p 22:22 -p 80:80 -p 443:443 --name openwaf titansec/openwaf
-   2.2 enter openwaf
-       docker exec -it openwaf /bin/bash
-
-3. edit config
-   3.1 edit access rule
-       vi /opt/OpenWAF/conf/twaf_access_rule.json
-   3.2 edit log server addr
-       vi /opt/OpenWAF/conf/twaf_default_conf.json
-
-4. start-up OpenWAF
-    /usr/local/openresty/nginx/sbin/nginx -c /etc/ngx_openwaf.conf
-    
-PS:
-#add bridge address, e.g. 192.168.39.12
-    pipework br0 ContainerName ip/gateway
-    如：
-    pipework br0 openwaf 192.168.39.12/24@192.168.39.253
-
-Problems
-1. pipework: command not found
-
-   git clone https://github.com/jpetazzo/pipework.git
-   cp pipework/pipework /usr/local/bin/
-   
-2. Warning: arping not found; interface may not be immediately reachable
-
-   apt-get install arping
-```
+[请看 OpenWAF 安装文档](https://github.com/titansec/OpenWAF/blob/master/doc/%E8%BD%BB%E6%9D%BE%E7%8E%A9%E8%BD%ACOpenWAF%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87.md)
 
 [Back to TOC](#table-of-contents)
 
@@ -266,6 +170,11 @@ Personal QQ Mail
 
 290557551@qq.com
 
+QQ Group
+---------
+
+579790127
+
 [Back to TOC](#table-of-contents)
 
 Bugs and Patches
@@ -283,25 +192,34 @@ TODO
 
 * 01. 上传人机识别模块
 * 02. 上传防盗链模块
-* 03. 上传防CC模块
-* 04. 上传cookie防篡改模块
-* 05. 上传基于频率的模糊识别防探测模块
-* 06. 上传WebShell上传防护模块
-* 07. 上传防CSRF模块
-* 08. 上传OpenWAF docker
-* 09. 提供页面体验OpenWAF防护功能
-* 10. 放开动态配置规则引擎API
-* 11. 放开动态配置行为分析引擎API
+* 03. 上传cookie防篡改模块
+* 04. 上传基于频率的模糊识别防探测模块
+* 05. 上传WebShell上传防护模块
+* 06. 上传防CSRF模块
+* 07. 放开动态配置规则引擎API
+* 08. 放开动态配置行为分析引擎API
+
+[MORE](https://github.com/miracleqi/OpenWAF_TODO)
 
 [Back to TOC](#table-of-contents)
 
 Changes
 =======
 
+Time: 2017/03/20  
+Version: v0.0.4  
+&emsp;&emsp;1. New Module - twaf_anti_cc  
+&emsp;&emsp;&emsp;&emsp;Anti http flood  
+
+Time: 2017/01/03  
+Version: v0.0.3.170103_beta  
+&emsp;&emsp;1. New Module - twaf_anti_mal_crawler  
+&emsp;&emsp;&emsp;&emsp;Distinguish malicious crawler and some scan tools  
+
 Time: 2016/12/05  
 Version: v0.0.2.161205_beta  
 &emsp;&emsp;1. New Module - twaf_attack_response  
-&emsp;&emsp;&emsp;&emsp;Return Custom response page When the request is rejected by OpenWAF  
+&emsp;&emsp;&emsp;&emsp;Return custom response page When the request is rejected by OpenWAF  
 &emsp;&emsp;2. Api - api/stat[/policy_uuid]  
 &emsp;&emsp;&emsp;&emsp;Show statistical infomation  
     
@@ -350,6 +268,7 @@ Modules Configuration Directives
 * [twaf_reqstat](#twaf_reqstat)
 * [twaf_log](#twaf_log)
 * [twaf_secrules](#twaf_secrules)
+* [twaf_anti_cc](#twaf_anti_cc)
 
 [Back to TOC](#table-of-contents)
 
@@ -358,7 +277,7 @@ twaf_access_rule
 
 ```txt
 {
-    "twaf_access_rule": [
+    "twaf_access_rule": {
         "rules": [                                 -- 注意先后顺序
             {                                      
                 "client_ssl": false,               -- 客户端认证的开关，与ngx_ssl组成双向认证
@@ -367,8 +286,8 @@ twaf_access_rule
                 "ngx_ssl_cert": "path",            -- nginx认证所需PEM证书地址
                 "ngx_ssl_key": "path",             -- nginx认证所需PEM私钥地址
                 "host": "^1\\.1\\.1\\.1$",         -- 域名，正则匹配
-                "port": 80,                        -- 端口号（缺省80）
-                "path": "\/",                      -- 路径，正则匹配
+                "port": 80,                        -- 端口号（缺省80）
+                "path": "\/",                      -- 路径，正则匹配
                 "server_ssl": false,               -- 后端服务器ssl开关
                 "forward": "server_5",             -- 后端服务器upstream名称
                 "forward_addr": "1.1.1.2",         -- 后端服务器ip地址
@@ -380,7 +299,8 @@ twaf_access_rule
     }
 }
 ```
-###rules
+rules
+-----
 **syntax:** *"rules": table*
 
 **default:** *none*
@@ -389,16 +309,19 @@ twaf_access_rule
 
 table类型，接入规则，顺序匹配
 
-###client_ssl
+client_ssl
+----------
 **syntax:** *"client_ssl": true|false*
 
 **default:** *false*
 
 **context:** *twaf_access_rule*
 
-客户端认证开关，与ngx_ssl组成双向认证，默认false
+客户端认证开关，与ngx_ssl组成双向认证，默认false  
+PS: 当前客户端认证不生效  
 
-###client_ssl_cert
+client_ssl_cert
+---------------
 **syntax:** *"client_ssl_cert": "path"*
 
 **default:** *none*
@@ -407,7 +330,8 @@ table类型，接入规则，顺序匹配
 
 string类型，客户端认证所需PEM证书地址，目前仅支持绝对地址
 
-###ngx_ssl
+ngx_ssl
+-------
 **syntax:** *"ngx_ssl": true|false*
 
 **default:** *false*
@@ -416,7 +340,8 @@ string类型，客户端认证所需PEM证书地址，目前仅支持绝对地�
 
 boolean类型，服务器端(nginx)认证开关，与client_ssl组成双向认证，默认关闭
 
-###ngx_ssl_cert
+ngx_ssl_cert
+------------
 **syntax:** *"ngx_ssl_cert": "path"*
 
 **default:** *none*
@@ -425,7 +350,8 @@ boolean类型，服务器端(nginx)认证开关，与client_ssl组成双向认�
 
 string类型，服务器端(nginx)认证所需PEM证书地址，目前仅支持绝对地址
 
-###ngx_ssl_key
+ngx_ssl_key
+-----------
 **syntax:** *"ngx_ssl_key": "path"*
 
 **default:** *none*
@@ -434,14 +360,15 @@ string类型，服务器端(nginx)认证所需PEM证书地址，目前仅支持�
 
 string类型，服务器端(nginx)认证所需PEM私钥地址，目前仅支持绝对地址
 
-###host
+host
+----
 **syntax:** *"host": "ip|domain name regex"*
 
 **default:** *none*
 
 **context:** *twaf_access_rule*
 
-string类型，域名，正则匹配
+string类型，域名，正则匹配(匹配时，忽略大小写)
 
 例如:
 ```
@@ -451,7 +378,8 @@ string类型，域名，正则匹配
     "host": "www.baidu.com"
 ```
 
-###port
+port
+----
 **syntax:** *"port": number*
 
 **default:** *80*
@@ -460,7 +388,8 @@ string类型，域名，正则匹配
 
 number类型，端口号
 
-###path
+path
+----
 **syntax:** *"path": "regex"*
 
 **default:** *none*
@@ -476,7 +405,8 @@ string类型，路径，正则匹配
     "path": "/[a|b]test"
 ```
 
-###server_ssl
+server_ssl
+----------
 **syntax:** *"server_ssl": true|false*
 
 **default:** *false*
@@ -506,7 +436,8 @@ boolean类型，OpenWAF向后端服务器连接的ssl开关
     }
 ```
 
-###forward
+forward
+-------
 **syntax:** *"forward": "upstream_uuid"*
 
 **default:** *none*
@@ -522,7 +453,8 @@ string类型，forward表示后端服务器的uuid，即upstream的名称
     }
 ```
 
-###forward_addr
+forward_addr
+------------
 **syntax:** *"forward_addr": "ip"*
 
 **default:** *none*
@@ -538,7 +470,8 @@ string类型，forward_addr表示后端服务器的ip地址（TODO：支持域�
     }
 ```
 
-###forward_port
+forward_port
+------------
 **syntax:** *"forward_port": port*
 
 **default:** *80*
@@ -554,7 +487,8 @@ number类型，forward_port表示后端服务器端口号，默认80
     }
 ```
 
-###uuid
+uuid
+----
 **syntax:** *"uuid": "string"*
 
 **default:** *none*
@@ -563,7 +497,8 @@ number类型，forward_port表示后端服务器端口号，默认80
 
 string类型，接入规则的唯一标识
 
-###policy
+policy
+------
 **syntax:** *"policy": "policy_uuid"*
 
 **default:** *none*
@@ -595,70 +530,82 @@ twaf_anti_hotlink
     }
 }
 ```
-###state
+state
+-----
 **syntax:** *"state": true|false|"$dynamic_state"*
 
 **default:** *false*
 
 **context:** *twaf_anti_hotlink*
 
-###log_state
+当前模块暂未开源
+
+log_state
+---------
 **syntax:** *"log_state": true|false|"$dynamic_state"*
 
 **default:** *true*
 
 **context:** *twaf_anti_hotlink*
 
-###ct_state
+ct_state
+--------
 **syntax:** *"ct_state": true|false|"$dynamic_state"*
 
 **default:** *false*
 
 **context:** *twaf_anti_hotlink*
 
-###event_id
+event_id
+--------
 **syntax:** *"event_id": "string"*
 
 **default:** *"110001"*
 
 **context:** *twaf_anti_hotlink*
 
-###event_severity
+event_severity
+--------------
 **syntax:** *"event_severity": "string"*
 
 **default:** *"medium"*
 
 **context:** *twaf_anti_hotlink*
 
-###action
+action
+------
 **syntax:** *"action": "string"*
 
 **default:** *"DENY"*
 
 **context:** *twaf_anti_hotlink*
 
-###action_meta
+action_meta
+-----------
 **syntax:** *"action_meta": "string"|number*
 
 **default:** *403*
 
 **context:** *twaf_anti_hotlink*
 
-###mode
+mode
+----
 **syntax:** *"mode": "string"*
 
 **default:** *"referer"*
 
 **context:** *twaf_anti_hotlink*
 
-###allow_noreferer
+allow_noreferer
+---------------
 **syntax:** *"allow_noreferer": true|false*
 
 **default:** *true*
 
 **context:** *twaf_anti_hotlink*
 
-###cookie_name
+cookie_name
+-----------
 **syntax:** *"cookie_name": "string"*
 
 **default:** *TWAF_AH*
@@ -669,7 +616,8 @@ cookie_name表示盗链模块发送COOKIE的名称，默认"TWAF_AH"
 
 此配置只有mode为cookie模式下生效
 
-###uri_ext
+uri_ext
+-------
 **syntax:** *"uri_ext": array|exten|"all"*
 
 **default:** *none*
@@ -698,25 +646,32 @@ uri_ext表示对哪些资源进行盗链防护
 
 twaf_anti_mal_crawler
 ---------------------
-```json
+```txt
 {
-    "state":false,
-    "cookie_state":true,
-    "log_state":true,
-    "event_id":"710001",
-    "event_severity":"high",
-    "force_scan_robots_state":false,
-    "shared_dict_key":["remote_addr", "http_user_agent"],
-    "timeout":300,
-    "crawler_cookie_name":"crawler",
-    "mal_cookie_name":"mcrawler",
-    "trap_uri":"/abc/abc.html",
-    "trap_args":"id=1",
-    "action":"DENY",
-    "action_meta":403
+    "state": false,                                            -- 模块开关，支持 true，false
+    "log_state":true,                                          -- 日志开关
+
+    "dict_state": false,                                       -- shared_dict 开关
+    "shared_dict_name":"twaf_anti_mal_crawler",                -- shared_dict 名称,若为空，则值为 "twaf_global" 下的 "dict_name"
+    "shared_dict_key": "remote_addr",                          -- shared_dict 键值
+    "timeout":300,                                             -- shared_dict 保存状态有效时长（单位秒）
+    "timer_flush_expired":200,                                 -- shared_dict 清除过期信息的间隔时间（单位秒）,若为空，则值为 "twaf_global" 下的 "timer_flush_expired"
+
+    "cookie_state":true,                                       -- cookie机制开关
+    "crawler_cookie_name":"TWAF_crawler",                      -- 爬虫cookie名称
+    "mal_cookie_name":"TWAF_mcrawler",                         -- 恶意爬虫cookie名称
+
+    "force_scan_robots_state":true,                            -- 页面注入诱捕路径的开关
+    "force_scan_times": 3,                                     -- 注入诱捕路径的页面个数
+    "trap_uri":"/abc/abc.html",                                -- 诱捕路径
+    "trap_args":"id=1",                                        -- 诱捕参数
+
+    "action":"DENY",                                           -- 执行动作，支持 "ALLOW", "DENY", "REDIRECT", "ROBOT", "RESET_CONNECTION", "PASS" 等
+    "action_meta": 403                                         -- 执行动作的附属信息，若 action 为 DENY，action_meta为响应码，若 action 为 REDIRECT，action_meta 为重定向 url
 }
 ```
-###state
+state
+-----
 **syntax:** *state true|false|$dynamic_state*
 
 **default:** *false*
@@ -727,18 +682,8 @@ twaf_anti_mal_crawler
 
 [Back to MCD](#twaf_anti_mal_crawler)
 
-###cookie_state
-**syntax:** *cookie_state true|false|$dynamic_state*
-
-**default:** *true*
-
-**context:** *twaf_anti_mal_crawler*
-
-是否发送cookie,默认true（发送），支持动态开关
-
-[Back to MCD](#twaf_anti_mal_crawler)
-
-###log_state
+log_state
+---------
 **syntax:** *log_state true|false|$dynamic_state*
 
 **default:** *true*
@@ -749,25 +694,153 @@ twaf_anti_mal_crawler
 
 [Back to MCD](#twaf_anti_mal_crawler)
 
-###event_id
-**syntax:** *event_id <string>*
+dict_state
+----------
+**syntax:** *dict_state true|false*
 
-**default:** *"710001"*
+**default:** *false*
 
 **context:** *twaf_anti_mal_crawler*
 
-记录安全日志时，显示的事件ID
+shared_dict 开关。当 dict_state 为 true，某 IP 被此模块拦截，会被记录在内存中，在 timeout 时间内访问会被拦截(且重置timeout)
 
 [Back to MCD](#twaf_anti_mal_crawler)
 
-###event_severity
-**syntax:** *event_severity critical|high|medium|low*
+shared_dict_name
+----------------
+**syntax:** *shared_dict_name <string>*
 
-**default:** *high*
+**default:** *nil*
 
 **context:** *twaf_anti_mal_crawler*
 
-记录安全日志时，显示的事件等级
+shared_dict 名称。对应 nginx 中的配置项，不可轻易修改
+
+若为空，则值为 "twaf_global" 下的 "dict_name"
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+shared_dict_key
+---------------
+**syntax:** *shared_dict_key <string>|<array>*
+
+**default:** *remote_addr*
+
+**context:** *twaf_anti_mal_crawler*
+
+shared_dict 键值。支持数组
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+timeout
+-------
+**syntax:** *timeout <number>*
+
+**default:** *300*
+
+**context:** *twaf_anti_mal_crawler*
+
+shared_dict 保存状态有效时长（单位秒）
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+timer_flush_expired
+-------------------
+**syntax:** *timeout <number>*
+
+**default:** *200*
+
+**context:** *twaf_anti_mal_crawler*
+
+shared_dict 清除过期信息的间隔时间（单位秒）,若为空，则值为 "twaf_global" 下的 "timer_flush_expired"
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+cookie_state
+------------
+**syntax:** *cookie_state true|false|$dynamic_state*
+
+**default:** *true*
+
+**context:** *twaf_anti_mal_crawler*
+
+是否发送cookie,默认true（发送），支持动态开关
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+crawler_cookie_name
+-------------------
+**syntax:** *crawler_cookie_name <string>*
+
+**default:** *"TWAF_crawler"*
+
+**context:** *twaf_anti_mal_crawler*
+
+爬虫 cookie 名称
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+mal_cookie_name
+---------------
+**syntax:** *mal_cookie_name <string>*
+
+**default:** *TWAF_mcrawler*
+
+**context:** *twaf_anti_mal_crawler*
+
+恶意爬虫cookie名称
+
+[Back to MCD](#twaf_anti_mal_crawler)
+    
+force_scan_robots_state
+-----------------------
+**syntax:** *force_scan_robots_state true|false*
+
+**default:** *true*
+
+**context:** *twaf_anti_mal_crawler*
+
+页面注入诱捕路径的开关
+
+某些扫描工具不会去访问 /robots.txt，因此在他访问的页面中插入禁爬目录的暗链
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+force_scan_times
+----------------
+**syntax:** *force_scan_times <number>*
+
+**default:** *3*
+
+**context:** *twaf_anti_mal_crawler*
+
+注入诱捕路径的页面数
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+trap_uri
+--------
+**syntax:** *trap_uri <string>*
+
+**default:** */abc/abc.html*
+
+**context:** *twaf_anti_mal_crawler*
+
+诱捕路径，访问此路径，被标识为恶意爬虫
+
+[Back to MCD](#twaf_anti_mal_crawler)
+
+trap_args
+---------
+**syntax:** *trap_args <string>*
+
+**default:** *id=1*
+
+**context:** *twaf_anti_mal_crawler*
+
+诱捕参数。携带此参数访问诱捕路径，不会标识为攻击
+
+[Back to MCD](#twaf_anti_mal_crawler)
 
 [Back to twaf_anti_mal_crawler](#twaf_anti_mal_crawler)
 
@@ -785,7 +858,8 @@ twaf_reqstat
     }
 ```
 
-###state
+state
+-----
 **syntax:** *state true|false|$dynamic_state*
 
 **default:** *true*
@@ -794,7 +868,8 @@ twaf_reqstat
 
 统计模块开关，支持动态开关，默认开启
 
-###access_state
+access_state
+------------
 **syntax:** *access_state true|false|$dynamic_state*
 
 **default:** *true*
@@ -803,7 +878,8 @@ twaf_reqstat
 
 访问信息统计开关，支持动态开关，默认开启
 
-###safe_state
+safe_state
+----------
 **syntax:** *safe_state true|false|$dynamic_state*
 
 **default:** *true*
@@ -812,7 +888,8 @@ twaf_reqstat
 
 安全信息统计开关，支持动态开关，默认开启
 
-###upstream_state
+upstream_state
+--------------
 **syntax:** *upstream_state true|false|$dynamic_state*
 
 **default:** *true*
@@ -821,7 +898,8 @@ twaf_reqstat
 
 转发信息统计开关，支持动态开关，默认开启
 
-###shared_dict_name
+shared_dict_name
+----------------
 **syntax:** *shared_dict_name string*
 
 **default:** *openwaf_reqshm*
@@ -847,7 +925,8 @@ twaf_log
         "host":"127.0.0.1",           -- 日志服务器地址
         "port":60055,                 -- 日志服务器端口号
         "flush_limit":0,              -- 缓冲，当存储的日志大于阈值才发送
-        "drop_limit":1048576,
+        "size_limit": 200,            -- 控制日志中每一项的字符上限，如'raw_header'或请求体响应体，可能会使udp日志报错
+        "drop_limit":65507,           -- 缓冲上限，达到此值，丢弃当前日志，发送缓存并清空缓存，当sock_type为udp时，drop_limit值最大为65507（65508会报错message too long）
         "max_retry_times":5,          -- 最大容错次数
         "ssl":false,                  -- 是否开启ssl协议
         "access_log":{}               -- 访问日志格式
@@ -855,7 +934,8 @@ twaf_log
 }
 ```
 
-###access_log_state
+access_log_state
+----------------
 **syntax:** *"access_log_state": true|false*
 
 **default:** *false*
@@ -864,7 +944,8 @@ twaf_log
 
 访问日志开关，默认关闭
 
-###security_log_state
+security_log_state
+------------------
 **syntax:** *"security_log_state": true|false*
 
 **default:** *true*
@@ -873,7 +954,8 @@ twaf_log
 
 安全事件日志开关，默认开启
 
-###sock_type
+sock_type
+---------
 **syntax:** *"sock_type": tcp|udp*
 
 **default:** *udp*
@@ -882,7 +964,8 @@ twaf_log
 
 日志传输协议，默认udp
 
-###content_type
+content_type
+------------
 **syntax:** *"content_type": JSON|INFLUXDB*
 
 **default:** *JSON*
@@ -891,7 +974,8 @@ twaf_log
 
 日志格式，默认JSON
 
-###host
+host
+----
 **syntax:** *"host": string*
 
 **default:** *"127.0.0.1"*
@@ -900,7 +984,8 @@ twaf_log
 
 日志接收服务器的ip地址
 
-###port
+port
+----
 **syntax:** *"port": number*
 
 **default:** *60055*
@@ -909,7 +994,8 @@ twaf_log
 
 日志接收服务器的端口号
 
-###flush_limit
+flush_limit
+-----------
 **syntax:** *"flush_limit": number*
 
 **default:** *0*
@@ -918,14 +1004,28 @@ twaf_log
 
 缓冲区大小，当存储的日志大于阈值才发送，默认值为0，即立即发送日志
 
-###drop_limit
-**syntax:** *"drop_limit": number*
+size_limit
+----------
+**syntax:** *"size_limit": number*
 
-**default:** *1048576*
+**default:** *200*
 
 **context:** *twaf_log*
 
-###max_retry_times
+控制日志中每一项的字符上限，如'raw_header'或请求体响应体，可能会使udp日志报错
+
+drop_limit
+----------
+**syntax:** *"drop_limit": number*
+
+**default:** *65507*
+
+**context:** *twaf_log*
+
+缓冲上限，达到此值，丢弃当前日志，发送缓存并清空缓存，当sock_type为udp时，drop_limit值最大为65507（65508会报错message too long）
+
+max_retry_times
+---------------
 **syntax:** *"max_retry_times": number*
 
 **default:** *5*
@@ -934,7 +1034,8 @@ twaf_log
 
 最大容错次数
 
-###ssl
+ssl
+---
 **syntax:** *"ssl": true|false*
 
 **default:** *false*
@@ -943,7 +1044,8 @@ twaf_log
 
 是否开启ssl协议，默认false
 
-###access_log
+access_log
+----------
 **syntax:** *"access_log": table*
 
 **default:** *false*
@@ -952,7 +1054,8 @@ twaf_log
 
 访问日志格式
 
-###security_log
+security_log
+------------
 **syntax:** *"security_log": table*
 
 **default:** *false*
@@ -1047,19 +1150,23 @@ twaf_secrules
         "reqbody_state": true,                                      -- 请求体检测开关
         "header_filter_state": true,                                -- 响应头检测开关
         "body_filter_state": true,                                  -- 响应体检测开关
+        "system_rules_state": true,                                 -- 系统规则集检测开关
         "reqbody_limit":134217728,                                  -- 请求体检测阈值，大于阈值不检测
         "respbody_limit":524288,                                    -- 响应体检测阈值，大于阈值不检测
         "pre_path": "/opt/OpenWAF/",                                -- OpenWAF安装路径
         "path": "lib/twaf/inc/knowledge_db/twrules",                -- 特征规则库在OpenWAF中的路径
+        "user_defined_rules":[                                      -- 用户自定义规则，数组
+        ],
         "rules_id":{                                                -- 特征排除
-            "111112": [{"REMOTE_HOST":"a.com", "URI":"^/ab"}]       -- 匹配中数组中信息则对应规则失效，数组中key为变量名称，值支持正则
-            "111113": {}                                            -- 特征未被排除
+            "111112": [{"REMOTE_HOST":"a.com", "URI":"^/ab"}],      -- 匹配中数组中信息则对应规则失效，数组中key为变量名称，值支持正则
+            "111113": {},                                           -- 特征未被排除
             "111114": [{}]                                          -- 特征被无条件排除
         }
     }
 ```
 
-###state
+state
+-----
 **syntax:** *state true|false*
 
 **default:** *true*
@@ -1068,7 +1175,8 @@ twaf_secrules
 
 规则引擎总开关
 
-###reqbody_state
+reqbody_state
+-------------
 **syntax:** *reqbody_state true|false*
 
 **default:** *true*
@@ -1077,7 +1185,8 @@ twaf_secrules
 
 请求体检测开关
 
-###header_filter_state
+header_filter_state
+-------------------
 **syntax:** *header_filter_state true|false*
 
 **default:** *true*
@@ -1086,7 +1195,8 @@ twaf_secrules
 
 响应头检测开关
 
-###body_filter_state
+body_filter_state
+-----------------
 **syntax:** *body_filter_state true|false*
 
 **default:** *false*
@@ -1095,7 +1205,24 @@ twaf_secrules
 
 响应体检测开关，默认关闭，若开启需添加第三方模块[ngx_http_twaf_header_sent_filter_module暂未开源]
 
-###reqbody_limit
+system_rules_state
+-----------------
+**syntax:** *system_rules_state true|false*
+
+**default:** *true*
+
+**context:** *twaf_secrules*
+
+系统规则集检测开关
+
+lib/twaf/inc/knowledge_db/twrules 目录下的规则，都是系统规则
+
+除了系统规则外，还有 twaf_secrules 模块下 user_defined_rules 的用户自定义规则
+
+系统规则一般很少改动，而用户自定义规则却随着业务而增减，如动态配置缓存、压缩、时域控制和黑白名单等。
+
+reqbody_limit
+-------------
 **syntax:** *reqbody_limit number*
 
 **default:** *134217728*
@@ -1106,7 +1233,8 @@ twaf_secrules
 
 PS：reqbody_limit值要小于nginx中client_body_buffer_size的值才会生效
 
-###respbody_limit
+respbody_limit
+--------------
 **syntax:** *respbody_limit number*
 
 **default:** *134217728*
@@ -1115,7 +1243,8 @@ PS：reqbody_limit值要小于nginx中client_body_buffer_size的值才会生效
 
 响应体检测大小上限，默认134217728B(128MB)，若响应体大小超过设置上限，则不检测
 
-###pre_path
+pre_path
+--------
 **syntax:** *pre_path string*
 
 **default:** */opt/OpenWAF/*
@@ -1124,7 +1253,8 @@ PS：reqbody_limit值要小于nginx中client_body_buffer_size的值才会生效
 
 OpenWAF的安装路径
 
-###path
+path
+----
 **syntax:** *path string*
 
 **default:** *lib/twaf/inc/knowledge_db/twrules*
@@ -1133,7 +1263,20 @@ OpenWAF的安装路径
 
 特征规则库在OpenWAF中的路径
 
-###rules_id
+user_defined_rules
+------------------
+**syntax:** *user_defined_rules <array>*
+
+**default:** *[]*
+
+**context:** *twaf_secrules*
+
+用户自定义规则
+
+先执行用户自定义规则，再执行系统规则
+        
+rules_id
+--------
 **syntax:** *rules_id table*
 
 **default:** *none*
@@ -1146,10 +1289,228 @@ OpenWAF的安装路径
 
 [Back to TOC](#table-of-contents)
 
+twaf_anti_cc
+------------
+
+```txt
+{
+    "twaf_limit_conn": {
+        "state":false,                                       -- CC防护模块开关
+        "log_state":true,                                    -- CC日志开关
+        "trigger_state":true,                                -- 触发开关
+        "clean_state":true,                                  -- 清洗开关
+        "trigger_thr":{                                      -- 触发阈值（关系为“或”）
+            "req_flow_max":1073741824,                       -- 每秒请求流量，单位B
+            "req_count_max":10000                            -- 每秒请求数
+        },
+        "clean_thr":{                                        -- 清洗阈值
+            "new_conn_max":40,                               -- 单一源ip每秒新建连接数
+            "conn_max":100,                                  -- 单一源ip防护期间内连接总数
+            "req_max":50,                                    -- 单一源ip每秒请求总数
+            "uri_frequency_max":3000                         -- 单一路径每秒请求总数
+        },
+        "attacks": 1,                                        -- 在一次CC攻击过程中，某ip触发清洗值的次数大于attacks，则此ip会一直被拦截，直到CC攻击结束
+        "timer_flush_expired":10,                            -- 清理shared_dict过期数据的时间间隔
+        "interval":10,                                       -- 进入CC防护后发送日志的时间间隔，单位秒
+        "shared_dict_name":"twaf_limit_conn",                -- 存放其他信息的shared_dict
+        "shared_dict_key": "remote_addr",                    -- shared_dict的键值
+        "action":"DENY",                                     -- 触发CC防护执行的动作
+        "action_meta":403,
+        "timeout":30                                         -- 清洗时长（当再次触发清洗值时，重置）
+    }
+}
+```
+
+rules
+-----
+**syntax:** *"state": true|false*
+
+**default:** *false*
+
+**context:** *twaf_limit_conn*
+
+boolean类型，CC防护模块总开关，默认关闭
+
+log_state
+---------
+**syntax:** *"log_state": true|false*
+
+**default:** *true*
+
+**context:** *twaf_limit_conn*
+
+boolean类型，CC防护模块日志开关，默认开启
+
+trigger_state
+-------------
+**syntax:** *"trigger_state": true|false*
+
+**default:** *true*
+
+**context:** *twaf_limit_conn*
+
+boolean类型，CC防护模块的触发开关，默认开启
+
+若关闭，则触发机制关闭，时刻进入CC清洗状态
+
+clean_state
+-----------
+**syntax:** *"clean_state": true|false*
+
+**default:** *true*
+
+**context:** *twaf_limit_conn*
+
+boolean类型，CC防护模块总开关，默认开启
+
+若关闭（仅用于测试），则清洗机制关闭，CC模块将无法拦截请求
+
+trigger_thr
+-----------
+**syntax:** *"trigger_thr": table*
+
+**default:** *{"req_flow_max":1073741824,"req_count_max":10000}*
+
+**context:** *twaf_limit_conn*
+
+table类型，触发阈值
+
+当达到其中一个触发阈值，进入CC清洗状态
+
+当前有两个触发阈值  
+```txt
+    "trigger_thr":{                                      -- 触发阈值（关系为“或”）
+        "req_flow_max":1073741824,                       -- 每秒请求流量，单位B，默认1GB/s
+        "req_count_max":10000                            -- 每秒请求数，默认10000个/秒
+    }
+```
+
+clean_thr
+---------
+**syntax:** *"clean_thr": table*
+
+**default:** *{"new_conn_max":40,"conn_max":100,"req_max":50,"uri_frequency_max":3000}*
+
+**context:** *twaf_limit_conn*
+
+table类型，清洗阈值
+
+当进入CC清洗状态，达到其中一个清洗阈值，则执行相应动作
+
+当前有四个清洗阈值  
+```txt
+    "clean_thr":{                                        -- 清洗阈值（关系为“或”）
+        "new_conn_max":40,                               -- 单一源ip每秒新建连接数，默认40个/秒
+        "conn_max":100,                                  -- 单一源ip防护期间内连接总数，默认100个
+        "req_max":50,                                    -- 单一源ip每秒请求总数，默认50个/秒
+        "uri_frequency_max":3000                         -- 单一路径每秒请求总数，默认3000个/秒
+    }
+```
+
+attacks
+-------
+**syntax:** *"attacks": number*
+
+**default:** *1*
+
+**context:** *twaf_limit_conn*
+
+在一次 CC 攻击过程中，某ip触发清洗阈值的次数大于 attacks ，则此 ip 会一直被拦截，直到 CC 攻击结束
+
+此前，在一次 CC 攻击过程中，当达到清洗阈值时，才会进行拦截。若未达到清洗阈值，即使之前被拦截过，也可正常访问后端服务器
+
+正确设置此参数，可以大大提升 CC 防护性能
+
+若想恢复以前的 CC 防护机制，只需 attacks 设为 0 即可
+
+此参数出现在 OpenWAF-0.0.6 版本， twaf_anti_cc 的 0.0.3 版本
+
+timer_flush_expired
+-------------------
+**syntax:** *"timer_flush_expired": number*
+
+**default:** *10*
+
+**context:** *twaf_limit_conn*
+
+number类型，清理shared_dict过期数据的时间间隔，默认10秒
+
+interval
+--------
+**syntax:** *"interval": number*
+
+**default:** *10*
+
+**context:** *twaf_limit_conn*
+
+number类型，进入CC防护后发送日志的时间间隔，默认10秒
+
+shared_dict_name
+----------------
+**syntax:** *"shared_dict_name": string*
+
+**default:** *"twaf_limit_conn"*
+
+**context:** *twaf_limit_conn*
+
+string类型，存放当前CC防护信息的shared_dict名称
+
+shared_dict_key
+---------------
+**syntax:** *"shared_dict_key": string|table*
+
+**default:** *"remote_addr"*
+
+**context:** *twaf_limit_conn*
+
+string或table类型，shared_dict的键值，支持nginx变量
+
+支持字符串类型和数组类型
+```
+    "shared_dict_key": "remote_addr"
+    
+    "shared_dict_key": ["remote_addr", "http_user_agent"]
+```
+
+action
+------
+**syntax:** *"action": string*
+
+**default:** *"DENY"*
+
+**context:** *twaf_limit_conn*
+
+string类型，触发CC防护执行的动作，默认"DENY"
+
+action_meta
+-----------
+**syntax:** *"action_meta": number|string*
+
+**default:** *403*
+
+**context:** *twaf_limit_conn*
+
+string或number类型，执行动作的附属信息，默认403
+
+timeout
+-------
+**syntax:** *"timeout": number*
+
+**default:** *30*
+
+**context:** *twaf_limit_conn*
+
+number类型，清洗时长，N秒内不再达到触发阈值，则退出CC清洗状态
+
+在清洗过程中，再次达到触发阈值，则时间重置为30秒
+
+[Back to TOC](#table-of-contents)
+
 Nginx Variables
 ===============
 
-###$twaf_https
+$twaf_https
+-----------
 **syntax:** *set $twaf_https 0|1*
 
 **default:** *0*
@@ -1160,7 +1521,7 @@ Nginx Variables
 
 "set $twaf_https 1"，则表示请求通过ssl加密
 
-"set $twaf_https 1"，则表示请求未通过ssl加密
+"set $twaf_https 0"，则表示请求未通过ssl加密
 
 ```
 server {
@@ -1176,7 +1537,8 @@ server {
 }
 ```
 
-###$twaf_upstream_server
+$twaf_upstream_server
+---------------------
 **syntax:** *set $twaf_upstream_server ""*
 
 **default:** *none*
@@ -1298,8 +1660,8 @@ Variables
 
 [Back to TOC](#table-of-contents)
 
-##ARGS
-
+ARGS
+----
 table类型，所有的请求参数，包含ARGS_GET和ARGS_POST
 
 ```
@@ -1314,8 +1676,8 @@ ARGS变量值为{"name": "miracle", "age": "5", "time": "123456", "day": "365"}
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_COMBINED_SIZE
-
+ARGS_COMBINED_SIZE
+------------------
 number类型，请求参数总长度，只包含key和value的长度，不包含'&'或'='等符号
 
 ```
@@ -1328,8 +1690,8 @@ ARGS_COMBINED_SIZE变量值为15，而不是18
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_GET
-
+ARGS_GET
+--------
 table类型，querystring参数
 
 ```
@@ -1342,8 +1704,8 @@ ARGS_GET变量值为{"name": "miracle", "age": "5"}
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_GET_NAMES
-
+ARGS_GET_NAMES
+--------------
 table类型，querystring参数key值
 
 ```
@@ -1356,8 +1718,8 @@ ARGS_GET_NAMES变量值为["name", "age"]
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_NAMES
-
+ARGS_NAMES
+----------
 table类型，querystring参数key值及post参数key值
 
 ```
@@ -1372,8 +1734,8 @@ ARGS_NAMES变量值为["name", "age", "time", "day"]
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_POST
-
+ARGS_POST
+---------
 table类型，POST参数
 
 ```
@@ -1390,8 +1752,8 @@ ARGS_POST变量值为{"time": "123456", "day": "365"}
 
 [Back to TOC](#table-of-contents)
 
-##ARGS_POST_NAMES
-
+ARGS_POST_NAMES
+---------------
 table类型，POST参数key值
 
 ```
@@ -1408,256 +1770,256 @@ ARGS_POST_NAMES变量值为["time", "day"]
 
 [Back to TOC](#table-of-contents)
 
-##BYTES_IN
-
+BYTES_IN
+--------
 number类型，接收信息字节数
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##CONNECTION_REQUESTS
-
+CONNECTION_REQUESTS
+-------------------
 number类型，当前连接中的请求数
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##DURATION
-
+DURATION
+--------
 string类型，处理事务用时时间，单位:微秒(μs)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##FILES
-
+FILES
+-----
 table类型，从请求体中得到的原始文件名(带有文件后缀名)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##FILES_NAMES
-
+FILES_NAMES
+-----------
 table类型，上传文件名称（不带有后缀名）
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO
-
+GEO
+---
 table类型，包含code3,code,id,continent,name等字段信息
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO_CODE3
-
+GEO_CODE3
+---------
 string类型，3个字母长度的国家缩写
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO_CODE
-
+GEO_CODE
+--------
 string类型，2个字母长度的国家缩写
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO_ID
-
+GEO_ID
+------
 number类型，国家ID
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO_CONTINENT
-
+GEO_CONTINENT
+-------------
 string类型，国家所在大洲
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GEO_NAME
-
+GEO_NAME
+--------
 string类型，国家全称
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##GZIP_RATIO
-
+GZIP_RATIO
+----------
 string类型，压缩比率
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##HTTP_COOKIE
-
+HTTP_COOKIE
+-----------
 string类型，请求头中的cookie字段
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##HTTP_HOST
-
+HTTP_HOST
+---------
 string类型，请求头中的host字段值，既域名:端口(80缺省)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##HTTP_REFERER
-
+HTTP_REFERER
+------------
 string类型，请求头中的referer字段
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##HTTP_USER_AGENT
-
+HTTP_USER_AGENT
+---------------
 string类型，请求头中的user-agent字段
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##IP_VERSION
-
+IP_VERSION
+----------
 string类型，IPv4 or IPv6
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##MATCHED_VAR
-
+MATCHED_VAR
+-----------
 类型不定，当前匹配中的变量
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##MATCHED_VARS
-
+MATCHED_VARS
+------------
 table类型，单条规则匹配中的所有变量
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##MATCHED_VAR_NAME
-
+MATCHED_VAR_NAME
+----------------
 string类型，当前匹配中的变量名称
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##MATCHED_VARS_NAMES
-
+MATCHED_VARS_NAMES
+------------------
 table类型，单条规则匹配中的所有变量名称
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##ORIGINAL_DST_ADDR
-
+ORIGINAL_DST_ADDR
+-----------------
 string类型，服务器地址，应用代理模式为WAF地址，透明模式为后端服务器地址
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##ORIGINAL_DST_PORT
-
+ORIGINAL_DST_PORT
+-----------------
 string类型，服务器端口号，应用代理模式为WAF端口号，透明模式为后端服务器端口号
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##POLICYID
-
+POLICYID
+--------
 string类型，策略ID
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##QUERY_STRING
-
+QUERY_STRING
+------------
 string类型，未解码的请求参数
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##RAW_HEADER
-
+RAW_HEADER
+----------
 string类型，请求头信息，带请求行
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##RAW_HEADER_TRUE
-
+RAW_HEADER_TRUE
+---------------
 string类型，请求头信息，不带请求行
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REMOTE_ADDR
-
+REMOTE_ADDR
+-----------
 string类型，客户端地址
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REMOTE_HOST
-
+REMOTE_HOST
+-----------
 string类型，域名
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REMOTE_PORT
-
+REMOTE_PORT
+-----------
 number类型，端口号
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REMOTE_USER
-
+REMOTE_USER
+-----------
 string类型，用于身份验证的用户名
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_BASENAME
-
+REQUEST_BASENAME
+----------------
 string类型，请求的文件名
 
 ```
@@ -1670,32 +2032,32 @@ REQUEST_BASENAME值为/login.php
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_BODY
-
+REQUEST_BODY
+------------
 类型不定，请求体
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_COOKIES
-
+REQUEST_COOKIES
+---------------
 table类型，请求携带的cookie
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_COOKIES_NAMES
-
+REQUEST_COOKIES_NAMES
+---------------------
 table类型，请求携带cookie的名称
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_FILENAME
-
+REQUEST_FILENAME
+----------------
 string类型，relative request URL(相对请求路径)
 
 ```
@@ -1708,56 +2070,56 @@ REQUEST_FILENAME值为/test/login.php
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_HEADERS
-
+REQUEST_HEADERS
+---------------
 table类型，请求头信息
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_HEADERS_NAMES
-
+REQUEST_HEADERS_NAMES
+---------------------
 table类型，请求头key值
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_LINE
-
+REQUEST_LINE
+------------
 string类型，请求行
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_METHOD
-
+REQUEST_METHOD
+--------------
 string类型，请求方法
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_PROTOCOL
-
+REQUEST_PROTOCOL
+----------------
 string类型，http请求协议，如: HTTP/1.1
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##HTTP_VERSION
-
+HTTP_VERSION
+------------
 string类型，http请求协议版本，如: 1.1
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##URI
-
+URI
+---
 string类型，请求路径，既不带域名，也不带参数
 
 ```
@@ -1770,8 +2132,8 @@ URI变量值为/test/login.php
 
 [Back to TOC](#table-of-contents)
 
-##URL
-
+URL
+---
 string类型，统一资源定位符，SCHEME与HTTP_HOST与URI的拼接
 
 ```
@@ -1784,8 +2146,8 @@ URL变量值为http://www.baid.com/test/login.php
 
 [Back to TOC](#table-of-contents)
 
-##REQUEST_URI
-
+REQUEST_URI
+-----------
 string类型，请求路径，带参数，但不带有域名
 
 ```
@@ -1798,32 +2160,32 @@ REQUEST_URI变量值为/test/login.php?name=miracle
 
 [Back to TOC](#table-of-contents)
 
-##RESPONSE_BODY
-
+RESPONSE_BODY
+-------------
 string类型，响应体
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##RESPONSE_HEADERS
-
+RESPONSE_HEADERS
+----------------
 table类型，响应头信息
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##RESPONSE_STATUS
-
+RESPONSE_STATUS
+---------------
 function类型，响应状态码
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##SCHEME
-
+SCHEME
+------
 string类型，http or https
 
 ```
@@ -1836,152 +2198,152 @@ SCHEME变量值为http
 
 [Back to TOC](#table-of-contents)
 
-##SERVER_ADDR
-
+SERVER_ADDR
+-----------
 string类型，服务器地址
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##SERVER_NAME
-
+SERVER_NAME
+-----------
 string类型，服务器名称
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##SERVER_PORT
-
+SERVER_PORT
+-----------
 number类型，服务器端口号
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##SESSION
-
+SESSION
+-------
 table类型，第三方模块lua-resty-session提供的变量
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##SESSION_DATA
-
+SESSION_DATA
+------------
 table类型，session信息，第三方模块lua-resty-session提供的变量
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME
-
+TIME
+----
 string类型，hour:minute:second
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_DAY
-
+TIME_DAY
+--------
 number类型，天(1-31)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_EPOCH
-
+TIME_EPOCH
+----------
 number类型，时间戳，seconds since 1970
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_HOUR
-
+TIME_HOUR
+---------
 number类型，小时(0-23)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_MIN
-
+TIME_MIN
+--------
 number类型，分钟(0-59)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_MON
-
+TIME_MON
+--------
 number类型，月份(1-12)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_SEC
-
+TIME_SEC
+--------
 number类型，秒(0-59)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_WDAY
-
+TIME_WDAY
+---------
 number类型，周(0-6)
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_YEAR
-
+TIME_YEAR
+---------
 number类型，年份，four-digit，例如: 1997
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TIME_LOCAL
-
+TIME_LOCAL
+----------
 string类型，当前时间，例如: 26/Aug/2016:01:32:16 -0400
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##TX
-
+TX
+--
 table类型，用于存储当前请求信息的变量，作用域仅仅是当前请求
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##UNIQUE_ID
-
+UNIQUE_ID
+---------
 string类型，ID标识，随机生成的字符串，可通过配置来控制随机字符串的长度
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##UPSTREAM_CACHE_STATUS
-
+UPSTREAM_CACHE_STATUS
+---------------------
 keeps the status of accessing a response cache (0.8.3). The status can be either “MISS”, “BYPASS”, “EXPIRED”, “STALE”, “UPDATING”, “REVALIDATED”, or “HIT”.
 
 [Back to Var](#variables)
 
 [Back to TOC](#table-of-contents)
 
-##USERID
-
+USERID
+------
 string类型，从接入规则配置得到的用于ID标识
 
 [Back to Var](#variables)
@@ -2018,8 +2380,8 @@ Transformation Functions
 
 [Back to TOC](#table-of-contents)
 
-##base64_decode
-
+base64_decode
+-------------
 Decodes a Base64-encoded string.
 
 Note: 注意transform的执行顺序
@@ -2040,104 +2402,104 @@ Note: 注意transform的执行顺序
 
 [Back to TOC](#table-of-contents)
 
-##sql_hex_decode
-
+sql_hex_decode
+--------------
 Decode sql hex data.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##base64_encode
-
+base64_encode
+-------------
 Encodes input string using Base64 encoding.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##counter
-
+counter
+-------
 计数，相当于modsecurity中的'&'符号
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##compress_whitespace
-
+compress_whitespace
+-------------------
 Converts any of the whitespace characters (0x20, \f, \t, \n, \r, \v, 0xa0) to spaces (ASCII 0x20), compressing multiple consecutive space characters into one.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##hex_decode
-
+hex_decode
+----------
 Decodes a string that has been encoded using the same algorithm as the one used in hexEncode 
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##hex_encode
-
+hex_encode
+----------
 Encodes string (possibly containing binary characters) by replacing each input byte with two hexadecimal characters.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##html_decode
-
+html_decode
+-----------
 Decodes the characters encoded as HTML entities.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##length
-
+length
+------
 Looks up the length of the input string in bytes
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##lowercase
-
+lowercase
+---------
 Converts all characters to lowercase
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##md5
-
+md5
+---
 Calculates an MD5 hash from the data in input. The computed hash is in a raw binary form and may need encoded into text to be printed (or logged). Hash functions are commonly used in combination with hex_encode (for example: "transform": ["md5", "hex_encode").
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##normalise_path
-
+normalise_path
+--------------
 Removes multiple slashes, directory self-references, and directory back-references (except when at the beginning of the input) from input string.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##remove_nulls
-
+remove_nulls
+------------
 Removes all NUL bytes from input
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##remove_whitespace
-
+remove_whitespace
+-----------------
 Removes all whitespace characters from input.
 
 移除空白字符\s，包含水平定位字符 ('\t')、归位键('\r')、换行('\n')、垂直定位字符('\v')或翻页('\f')等
@@ -2146,32 +2508,32 @@ Removes all whitespace characters from input.
 
 [Back to TOC](#table-of-contents)
 
-##replace_comments
-
+replace_comments
+----------------
 用一个空格代替/*...*/注释内容
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##remove_comments_char
-
+remove_comments_char
+--------------------
 Removes common comments chars (/*, */, --, #).
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##remove_comments
-
+remove_comments
+---------------
 去掉/*...*/注释内容
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##uri_decode
-
+uri_decode
+----------
 Unescape str as an escaped URI component.
 
 ```
@@ -2183,40 +2545,40 @@ Unescape str as an escaped URI component.
 
 [Back to TOC](#table-of-contents)
 
-##uri_encode
-
+uri_encode
+----------
 Escape str as a URI component.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##sha1
-
+sha1
+----
 Calculates a SHA1 hash from the input string. The computed hash is in a raw binary form and may need encoded into text to be printed (or logged). Hash functions are commonly used in combination with hex_encode (for example, "transform": ["sha1", "hex_encode"]).
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##trim_left
-
+trim_left
+---------
 Removes whitespace from the left side of the input string.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##trim_right
-
+trim_right
+----------
 Removes whitespace from the right side of the input string.
 
 [Back to TFF](#transformation-functions)
 
 [Back to TOC](#table-of-contents)
 
-##trim
-
+trim
+----
 Removes whitespace from both the left and right sides of the input string.
 
 [Back to TFF](#transformation-functions)
@@ -2249,16 +2611,16 @@ Operators
 
 [Back to TOC](#table-of-contents)
 
-##begins_with
-
+begins_with
+-----------
 Returns true if the parameter string is found at the beginning of the input.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##contains
-
+contains
+--------
 Returns true if the parameter string is found anywhere in the input.
 
 operator为contains且pattern为数组，相当于modsecurity的pm
@@ -2280,40 +2642,40 @@ PS: modsecurity的pm忽略大小写，OpenWAF中contains不忽略大小写
 
 [Back to TOC](#table-of-contents)
 
-##contains_word
-
+contains_word
+-------------
 Returns true if the parameter string (with word boundaries) is found anywhere in the input.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##detect_sqli
-
+detect_sqli
+-----------
 This operator uses LibInjection to detect SQLi attacks.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##detect_xss
-
+detect_xss
+----------
 This operator uses LibInjection to detect XSS attacks.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##ends_with
-
+ends_with
+---------
 Returns true if the parameter string is found at the end of the input.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##equal
-
+equal
+-----
 Performs a string comparison and returns true if the parameter string is identical to the input string.
 
 相当于modsecurity的eq和streq
@@ -2333,8 +2695,8 @@ Performs a string comparison and returns true if the parameter string is identic
 
 [Back to TOC](#table-of-contents)
 
-##greater_eq
-
+greater_eq
+----------
 Performs numerical comparison and returns true if the input value is greater than or equal to the provided parameter.
 
 return false, if a value is provided that cannot be converted to a number.
@@ -2343,8 +2705,8 @@ return false, if a value is provided that cannot be converted to a number.
 
 [Back to TOC](#table-of-contents)
 
-##greater
-
+greater
+-------
 Performs numerical comparison and returns true if the input value is greater than the operator parameter.
 
 return false, if a value is provided that cannot be converted to a number.
@@ -2353,8 +2715,8 @@ return false, if a value is provided that cannot be converted to a number.
 
 [Back to TOC](#table-of-contents)
 
-##ip_utils
-
+ip_utils
+--------
 Performs a fast ipv4 or ipv6 match of REMOTE_ADDR variable data. Can handle the following formats:
 
 Full IPv4 Address: 192.168.1.100
@@ -2383,8 +2745,8 @@ ip_utils与pf的组合相当于modsecurity中的ipMatchF和ipMatchFromFile
 
 [Back to TOC](#table-of-contents)
 
-##less_eq
-
+less_eq
+-------
 Performs numerical comparison and returns true if the input value is less than or equal to the operator parameter.
 
 return false, if a value is provided that cannot be converted to a number.
@@ -2393,8 +2755,8 @@ return false, if a value is provided that cannot be converted to a number.
 
 [Back to TOC](#table-of-contents)
 
-##less
-
+less
+----
 Performs numerical comparison and returns true if the input value is less than to the operator parameter.
 
 return false, if a value is provided that cannot be converted to a number.
@@ -2403,8 +2765,8 @@ return false, if a value is provided that cannot be converted to a number.
 
 [Back to TOC](#table-of-contents)
 
-##pf
-
+pf
+--
 pattern是operator操作的参数
 
 pf是指pattern from file，与pattern互斥（二者不可同时出现），目前仅支持绝对路径
@@ -2417,8 +2779,8 @@ pf与ip_utils组合，相当于modsecurity的ipMatchF或ipMatchFromFile
 
 [Back to TOC](#table-of-contents)
 
-##regex
-
+regex
+-----
 Performs a regular expression match of the pattern provided as parameter. 
 
 regex还有modecurity的capture捕获功能
@@ -2482,24 +2844,24 @@ OpenWAF中无capture指令，但使用regex默认开启capture功能
 
 [Back to TOC](#table-of-contents)
 
-##str_match
-
+str_match
+---------
 等同于contains
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##validate_url_encoding
-
+validate_url_encoding
+---------------------
 Validates the URL-encoded characters in the provided input string.
 
 [Back to OPERATORS](#operators)
 
 [Back to TOC](#table-of-contents)
 
-##num_range
-
+num_range
+---------
 判断是否在数字范围内
 
 它与transform的length组合，相当于modsecurity的validateByteRange
@@ -2519,8 +2881,8 @@ Validates the URL-encoded characters in the provided input string.
 
 [Back to TOC](#table-of-contents)
 
-##str_range
-
+str_range
+---------
 判断是否在字符串范围内
 
 ```
@@ -2543,12 +2905,15 @@ Others
 ------
 
 * [allow](#allow)
+* [allow_phase](#allow_phase)
 * [deny](#deny)
 * [id](#id)
 * [nolog](#nolog)
 * [op_negated](#op_negated)
 * [parse](#parse)
 * [pass](#pass)
+* [warn](#warn)
+* [audit](#audit)
 * [phase](#phase)
 * [proxy_cache](#proxy_cache)
 * [redirect](#redirect)
@@ -2567,20 +2932,34 @@ Others
 
 [Back to TOC](#table-of-contents)
 
-##allow
-
-Stops rule processing of the current phase on a successful match and allows the transaction to proceed.
+allow
+-----
+Stops processing of the current phase but also skipping over all other phases.
 
 ```
 "action": "allow"
+```
+
+一旦执行此动作，则后面的防护规则及其他安全模块均不进行安全检测，此动作一般用于白名单
+
+[Back to OTHERS](#others)
+
+[Back to TOC](#table-of-contents)
+
+allow_phase
+-----------
+Stops processing of the current phase.
+
+```
+"action": "allow_phase"
 ```
 
 [Back to OTHERS](#others)
 
 [Back to TOC](#table-of-contents)
 
-##deny
-
+deny
+----
 Stops rule processing and intercepts transaction.
 
 ```
@@ -2592,8 +2971,8 @@ Stops rule processing and intercepts transaction.
 
 [Back to TOC](#table-of-contents)
 
-##id
-
+id
+--
 Stops rule processing and intercepts transaction.
 
 ```
@@ -2604,8 +2983,8 @@ Stops rule processing and intercepts transaction.
 
 [Back to TOC](#table-of-contents)
 
-##nolog
-
+nolog
+-----
 不记录日志
 
 ```
@@ -2618,8 +2997,8 @@ Stops rule processing and intercepts transaction.
 
 [Back to TOC](#table-of-contents)
 
-##op_negated
-
+op_negated
+----------
 对operator结果的取反
 
 ```
@@ -2651,8 +3030,8 @@ Stops rule processing and intercepts transaction.
 
 [Back to TOC](#table-of-contents)
 
-##parse
-
+parse
+-----
 对变量进一步解析
 
 ```
@@ -2748,8 +3127,8 @@ Stops rule processing and intercepts transaction.
 
 [Back to TOC](#table-of-contents)
 
-##pass
-
+pass
+----
 Continues processing with the next rule in spite of a successful match.
 
 ```
@@ -2760,8 +3139,32 @@ Continues processing with the next rule in spite of a successful match.
 
 [Back to TOC](#table-of-contents)
 
-##phase
+warn
+----
+like 'pass'
 
+```
+"action": "warn"
+```
+
+[Back to OTHERS](#others)
+
+[Back to TOC](#table-of-contents)
+
+audit
+-----
+like 'pass'
+
+```
+"action": "audit"
+```
+
+[Back to OTHERS](#others)
+
+[Back to TOC](#table-of-contents)
+
+phase
+-----
 规则执行的阶段，取值可为"access","header_filter","body_filter"的组合
 
 ```
@@ -2784,8 +3187,8 @@ Continues processing with the next rule in spite of a successful match.
 
 [Back to TOC](#table-of-contents)
 
-##proxy_cache
-
+proxy_cache
+-----------
 ```
 {
     ...
@@ -2859,8 +3262,8 @@ PS: proxy_cache_content_type指令为官方指令，是miracle Qi修改Nginx源�
 
 [Back to TOC](#table-of-contents)
 
-##redirect
-
+redirect
+--------
 ```
 "action": "redirect",
 "meta": "/index.html"
@@ -2870,8 +3273,8 @@ PS: proxy_cache_content_type指令为官方指令，是miracle Qi修改Nginx源�
 
 [Back to TOC](#table-of-contents)
 
-##charactor_version
-
+charactor_version
+-----------------
 指定此条规则的版本，同modsecurity中Action的rev功能
 
 ```
@@ -2882,8 +3285,8 @@ PS: proxy_cache_content_type指令为官方指令，是miracle Qi修改Nginx源�
 
 [Back to TOC](#table-of-contents)
 
-##severity
-
+severity
+--------
 Assigns severity to the rule in which it is used.
 
 The data below is used by the OWASP ModSecurity Core Rule Set (CRS):
@@ -2907,8 +3310,8 @@ DEBUG
 
 [Back to TOC](#table-of-contents)
 
-##setvar
-
+setvar
+------
 Creates, removes, or updates a variable. 
 
 ```
@@ -2947,8 +3350,8 @@ Creates, removes, or updates a variable.
 
 [Back to TOC](#table-of-contents)
 
-##meta
-
+meta
+----
 "action"的附属信息
 
 ```
@@ -2965,16 +3368,16 @@ Creates, removes, or updates a variable.
 
 [Back to TOC](#table-of-contents)
 
-##transform
-
+transform
+---------
 This action is used to specify the transformation pipeline to use to transform the value of each variable used in the rule before matching.
 
 [Back to OTHERS](#others)
 
 [Back to TOC](#table-of-contents)
 
-##tag
-
+tag
+---
 Assigns a tag (category) to a rule.
 
 ```
@@ -2986,8 +3389,8 @@ Assigns a tag (category) to a rule.
 
 [Back to TOC](#table-of-contents)
 
-##release_version
-
+release_version
+---------------
 规则集版本，等同于modsecurity中Action的ver功能
 
 ```
@@ -2998,8 +3401,8 @@ Assigns a tag (category) to a rule.
 
 [Back to TOC](#table-of-contents)
 
-##robot
-
+robot
+-----
 人机识别
 
 需提前配置人机识别模块配置，此功能暂未放开
@@ -3012,19 +3415,39 @@ Assigns a tag (category) to a rule.
 
 [Back to TOC](#table-of-contents)
 
-##add_resp_headers
-
+add_resp_headers
+----------------
 增删改响应头
 
 ```
 例如隐藏server字段:
 "opts": {
-    "add"_resp_headers": {
+    "add_resp_headers": {
         "server": ""
     }
 }
 ```
 
 [Back to OTHERS](#others)
+
+[Back to TOC](#table-of-contents)
+
+Donation
+========
+
+PayPal
+------
+
+[通过 PayPal 来支持 OpenWAF](https://www.paypal.me/miracleqi)
+
+Alipay
+------
+
+<img src="http://i.imgur.com/0rSpXc8.png">
+
+WeChat
+------
+
+<img src="http://i.imgur.com/FzbU2z4.png">
 
 [Back to TOC](#table-of-contents)

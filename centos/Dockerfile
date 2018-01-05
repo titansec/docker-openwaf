@@ -10,6 +10,7 @@ FROM centos:7
 MAINTAINER Miracle
 
 #Docker Build Arguments
+ARG OPENWAF_VERSION="0.0.6"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
 ARG OPENRESTY_VERSION="1.11.2.2"
