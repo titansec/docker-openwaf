@@ -31,7 +31,7 @@ RUN apt-get update \
     && apt-get install wget -y
     
 #1.install openrestry related
-RUN apt-get install make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
+RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
     && cd ${OPENWAF_PREFIX} \
     && wget https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz \
     && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
