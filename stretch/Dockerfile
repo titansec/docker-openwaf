@@ -1,11 +1,11 @@
 ################################################
 # Dockerfile to build OpenWAF container images #
-# Based on centos 7                            #
+# Based on stretch                             #
 # https://github.com/titansec/docker-openwaf   #
 ################################################
 
-#Set the base image to jessie
-FROM centos:7
+#Set the base image to stretch
+FROM debian:stretch
 
 #File Author
 MAINTAINER Miracle
@@ -28,10 +28,11 @@ ARG OPENWAF_CONFIG_OPTIONS=" \
     --with-pcre=${OPENWAF_PREFIX}/pcre-${PCRE_VERSION} \ 
     "
 
-RUN yum install gcc gcc-c++ wget -y
+RUN apt-get update \
+    && apt-get install wget file -y
 
 #1.Install openrestry related
-RUN yum install make perl perl-ExtUtils-Embed readline-devel zlib-devel -y \
+RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
     && cd ${OPENWAF_PREFIX} \
     && wget https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz \
     && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
@@ -42,7 +43,7 @@ RUN yum install make perl perl-ExtUtils-Embed readline-devel zlib-devel -y \
 
 #2. Install OpenWAF
 RUN cd ${OPENWAF_PREFIX} \ 
-    && yum install GeoIP-devel git swig -y \ 
+    && apt-get install git swig -y \ 
     && git clone https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/configure ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION} \ 

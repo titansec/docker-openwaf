@@ -1,6 +1,7 @@
 ################################################
 # Dockerfile to build OpenWAF container images #
 # Based on jessie                              #
+# https://github.com/titansec/docker-openwaf   #
 ################################################
 
 #Set the base image to jessie
@@ -10,13 +11,13 @@ FROM debian:jessie
 MAINTAINER Miracle
 
 #Docker Build Arguments
-ARG OPENWAF_VERSION="0.0.6"
+ARG OPENWAF_VERSION="0.0.7"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
-ARG OPENRESTY_VERSION="1.11.2.2"
-ARG PCRE_VERSION="8.40"
-ARG OPENSSL_VERSION="1.0.2k"
-ARG CONFIG_OPTIONS=" \ 
+ARG OPENRESTY_VERSION="1.13.6.2"
+ARG PCRE_VERSION="8.42"
+ARG OPENSSL_VERSION="1.1.0h"
+ARG OPENWAF_CONFIG_OPTIONS=" \ 
     --with-pcre-jit --with-ipv6 \ 
     --with-http_stub_status_module \ 
     --with-http_ssl_module \ 
@@ -26,11 +27,11 @@ ARG CONFIG_OPTIONS=" \
     --with-openssl=${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \ 
     --with-pcre=${OPENWAF_PREFIX}/pcre-${PCRE_VERSION} \ 
     "
-    
+
 RUN apt-get update \
-    && apt-get install wget -y
-    
-#1.install openrestry related
+    && apt-get install wget file -y
+
+#1.Install openrestry related
 RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
     && cd ${OPENWAF_PREFIX} \
     && wget https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz \
@@ -39,9 +40,9 @@ RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncu
     && tar -zxvf pcre-${PCRE_VERSION}.tar.gz \
     && tar -zxvf openssl-${OPENSSL_VERSION}.tar.gz \
     && tar -zxvf openresty-${OPENRESTY_VERSION}.tar.gz 
-    
-#2. install OpenWAF
-RUN cd ${OPENWAF_PREFIX} \ 
+
+#2. Install OpenWAF
+RUN cd ${OPENWAF_PREFIX} \  
     && apt-get install git swig -y \ 
     && git clone https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
@@ -49,13 +50,14 @@ RUN cd ${OPENWAF_PREFIX} \
     && cp -RP ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
     && cd ${OPENWAF_PREFIX}/OpenWAF \ 
     && make install 
-    
-#3. install openresty
+
+#3. Build openresty
 RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \	
-    && ./configure ${CONFIG_OPTIONS} \
+    && ./configure ${OPENWAF_CONFIG_OPTIONS} \
     && make \
     && make install 
-    
+
+#4. Cleanup
 RUN cd ${OPENWAF_PREFIX} \ 
     && rm -rf \ 
         pcre-${PCRE_VERSION} \ 
@@ -65,6 +67,11 @@ RUN cd ${OPENWAF_PREFIX} \
         openssl-${OPENSSL_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION}.tar.gz
 
+# Add additional binaries into PATH for convenience
 ENV PATH=${OPENRESTY_PREFIX}/nginx/sbin/:${OPENRESTY_PREFIX}/bin/:$PATH
 
-ENTRYPOINT ["openresty", "-c", "/etc/ngx_openwaf.conf", "-g", "daemon off;"]
+CMD ["openresty", "-c", "/etc/ngx_openwaf.conf", "-g", "daemon off;"]
+
+# Use SIGQUIT instead of default SIGTERM to cleanly drain requests
+# See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls
+STOPSIGNAL SIGQUIT
