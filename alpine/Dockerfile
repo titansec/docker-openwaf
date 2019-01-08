@@ -14,7 +14,7 @@ MAINTAINER Miracle
 
 # Docker Build Arguments
 ARG OPENWAF_VERSION="0.0.6"
-ARG OPENWAF_PREFIX="/tmp"
+ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
 ARG OPENRESTY_VERSION="1.13.6.2"
 ARG PCRE_VERSION="8.42"
@@ -27,7 +27,6 @@ ARG OPENWAF_CONFIG_OPTIONS=" \
     --with-http_realip_module \ 
     --with-http_sub_module \ 
     --with-http_geoip_module \ 
-#   --with-openssl=${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \ 
     --with-pcre=${OPENWAF_PREFIX}/pcre-${PCRE_VERSION} \ 
     "
     
@@ -49,14 +48,16 @@ RUN apk add --no-cache --virtual .build-deps \
         libgcc \
         libxslt \
         zlib \
+    && mkdir ${OPENWAF_PREFIX} \
     && cd ${OPENWAF_PREFIX} \
     && curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz -o pcre-${PCRE_VERSION}.tar.gz \
     && curl -fSL https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz -o openssl-${OPENSSL_VERSION}.tar.gz \
     && curl -fSL https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz -o openresty-${OPENRESTY_VERSION}.tar.gz \
     && tar xzf pcre-${PCRE_VERSION}.tar.gz \
     && tar xzf openssl-${OPENSSL_VERSION}.tar.gz \
-    && tar xzf openresty-${OPENRESTY_VERSION}.tar.gz \
-    && cd ${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \
+    && tar xzf openresty-${OPENRESTY_VERSION}.tar.gz
+
+RUN cd ${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \
     && ./config no-async \
     && make \
     && make install
@@ -87,8 +88,14 @@ RUN cd ${OPENWAF_PREFIX} \
         openresty-${OPENRESTY_VERSION} \ 
         openssl-${OPENSSL_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION}.tar.gz \
+        OpenWAF/doc \
+        OpenWAF/lib/openresty \
+    && cd OpenWAF \
+    && rm -rf `ls -Fa | grep '^\.\w'` \
+    && rm -f `ls -F | grep -v '/$'` \
     && apk del .build-deps \
     && apk del .openwaf_build_deps
+    
 
 # Add additional binaries into PATH for convenience
 ENV PATH=${OPENRESTY_PREFIX}/luajit/bin/:${OPENRESTY_PREFIX}/nginx/sbin/:${OPENRESTY_PREFIX}/bin/:$PATH
