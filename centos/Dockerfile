@@ -4,14 +4,14 @@
 # https://github.com/titansec/docker-openwaf   #
 ################################################
 
-#Set the base image to jessie
+#Set the base image to centos
 FROM centos:7
 
 #File Author
 MAINTAINER Miracle
 
 #Docker Build Arguments
-ARG OPENWAF_VERSION="1.0.0¦Â"
+ARG OPENWAF_VERSION="v1.0.0_beta"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
 ARG OPENRESTY_VERSION="1.13.6.2"
@@ -48,7 +48,7 @@ RUN yum install make perl perl-ExtUtils-Embed readline-devel zlib-devel -y \
 #2. Install OpenWAF
 RUN cd ${OPENWAF_PREFIX} \ 
     && yum install GeoIP-devel git swig -y \ 
-    && git clone https://github.com/titansec/OpenWAF.git \ 
+    && git clone --branch ${OPENWAF_VERSION} https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/configure ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION} \ 
     && cp -RP ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
