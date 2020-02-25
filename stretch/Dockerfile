@@ -11,10 +11,11 @@ FROM debian:stretch
 MAINTAINER Miracle
 
 #Docker Build Arguments
-ARG OPENWAF_VERSION="0.0.7"
+ARG OPENWAF_VERSION="v1.0.0_beta"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
 ARG OPENRESTY_VERSION="1.13.6.2"
+ARG CIDR_VERSION="1.2.3"
 ARG PCRE_VERSION="8.42"
 ARG OPENSSL_VERSION="1.1.0h"
 ARG OPENWAF_CONFIG_OPTIONS=" \ 
@@ -34,22 +35,28 @@ RUN apt-get update \
 #1.Install openrestry related
 RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
     && cd ${OPENWAF_PREFIX} \
+    && wget http://www.over-yonder.net/~fullermd/projects/libcidr/libcidr-${CIDR_VERSION}.tar.xz \ 
     && wget https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz \
     && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
     && wget https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz \
+    && tar -xvf libcidr-${CIDR_VERSION}.tar.xz \
     && tar -zxvf pcre-${PCRE_VERSION}.tar.gz \
     && tar -zxvf openssl-${OPENSSL_VERSION}.tar.gz \
-    && tar -zxvf openresty-${OPENRESTY_VERSION}.tar.gz 
+    && tar -zxvf openresty-${OPENRESTY_VERSION}.tar.gz \
+    && cd ${OPENWAF_PREFIX}/libcidr-${CIDR_VERSION} \
+    && make && make install
 
 #2. Install OpenWAF
 RUN cd ${OPENWAF_PREFIX} \ 
     && apt-get install git swig -y \ 
-    && git clone https://github.com/titansec/OpenWAF.git \ 
+    && git clone --branch ${OPENWAF_VERSION} https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/configure ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION} \ 
     && cp -RP ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
     && cd ${OPENWAF_PREFIX}/OpenWAF \ 
-    && make install 
+    && make clean \
+    && make install \
+    && ln -s /usr/local/lib/libcidr.so /opt/OpenWAF/lib/resty/libcidr.so
 
 #3. Build openresty
 RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \	
@@ -61,6 +68,7 @@ RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \
 RUN cd ${OPENWAF_PREFIX} \ 
     && rm -rf \ 
         pcre-${PCRE_VERSION} \ 
+        libcidr-${CIDR_VERSION} \ 
         openssl-${OPENSSL_VERSION} \ 
         pcre-${PCRE_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION} \ 
