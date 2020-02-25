@@ -4,19 +4,21 @@
 # https://github.com/titansec/docker-openwaf   #
 ################################################
 
-#Set the base image to jessie
-ARG RESTY_IMAGE_BASE="alpine"
-ARG RESTY_IMAGE_TAG="3.8"
-FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
+#Set the base image to alpine
+#ARG RESTY_IMAGE_BASE="alpine"
+#ARG RESTY_IMAGE_TAG="3.8"
+#FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
+FROM alpine:3.8
 
 #File Author
 MAINTAINER Miracle
 
 # Docker Build Arguments
-ARG OPENWAF_VERSION="0.0.6"
+ARG OPENWAF_VERSION="v1.0.0_beta"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
 ARG OPENRESTY_VERSION="1.13.6.2"
+ARG CIDR_VERSION="1.2.3"
 ARG PCRE_VERSION="8.42"
 ARG OPENSSL_VERSION="1.1.0h"
 ARG OPENWAF_J="1"
@@ -42,6 +44,7 @@ RUN apk add --no-cache --virtual .build-deps \
         perl-dev \
         readline-dev \
         zlib-dev \
+        coreutils \ 
     && apk add --no-cache \
         gd \
         geoip \
@@ -50,12 +53,16 @@ RUN apk add --no-cache --virtual .build-deps \
         zlib \
     && mkdir ${OPENWAF_PREFIX} \
     && cd ${OPENWAF_PREFIX} \
+    && curl -fSL http://www.over-yonder.net/~fullermd/projects/libcidr/libcidr-${CIDR_VERSION}.tar.xz -o libcidr-${CIDR_VERSION}.tar.xz \ 
     && curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz -o pcre-${PCRE_VERSION}.tar.gz \
     && curl -fSL https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz -o openssl-${OPENSSL_VERSION}.tar.gz \
     && curl -fSL https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz -o openresty-${OPENRESTY_VERSION}.tar.gz \
+    && tar xvf libcidr-${CIDR_VERSION}.tar.xz \
     && tar xzf pcre-${PCRE_VERSION}.tar.gz \
     && tar xzf openssl-${OPENSSL_VERSION}.tar.gz \
-    && tar xzf openresty-${OPENRESTY_VERSION}.tar.gz
+    && tar xzf openresty-${OPENRESTY_VERSION}.tar.gz \
+    && cd ${OPENWAF_PREFIX}/libcidr-${CIDR_VERSION} \
+    && make && make install
 
 RUN cd ${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \
     && ./config no-async \
@@ -66,12 +73,14 @@ RUN cd ${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \
 RUN cd ${OPENWAF_PREFIX} \
     && apk add --no-cache --virtual .openwaf_build_deps git \
     && apk add --no-cache swig \
-    && git clone https://github.com/titansec/OpenWAF.git \ 
+    && git clone --branch ${OPENWAF_VERSION} https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/configure ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION} \ 
     && cp -RP ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/* ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/bundle/ \ 
     && cd ${OPENWAF_PREFIX}/OpenWAF \ 
-    && make install 
+    && make clean \
+    && make install \
+    && ln -s /usr/local/lib/libcidr.so /opt/OpenWAF/lib/resty/libcidr.so
     
 #3. Build openresty
 RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \	
@@ -83,6 +92,7 @@ RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \
 RUN cd ${OPENWAF_PREFIX} \ 
     && rm -rf \ 
         pcre-${PCRE_VERSION} \ 
+        libcidr-${CIDR_VERSION} \ 
         openssl-${OPENSSL_VERSION} \ 
         pcre-${PCRE_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION} \ 
