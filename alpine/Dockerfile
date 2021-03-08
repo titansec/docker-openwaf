@@ -14,13 +14,13 @@ FROM alpine:3.8
 MAINTAINER Miracle
 
 # Docker Build Arguments
-ARG OPENWAF_VERSION="v1.0.0_beta"
+ARG OPENWAF_VERSION="v1.1"
 ARG OPENWAF_PREFIX="/opt"
 ARG OPENRESTY_PREFIX="/usr/local/openresty"
-ARG OPENRESTY_VERSION="1.13.6.2"
+ARG OPENRESTY_VERSION="1.15.8.2"
 ARG CIDR_VERSION="1.2.3"
-ARG PCRE_VERSION="8.42"
-ARG OPENSSL_VERSION="1.1.0h"
+ARG PCRE_VERSION="8.43"
+ARG OPENSSL_VERSION="1.1.1d"
 ARG OPENWAF_J="1"
 ARG OPENWAF_CONFIG_OPTIONS=" \ 
     --with-pcre-jit --with-ipv6 \ 
@@ -29,6 +29,7 @@ ARG OPENWAF_CONFIG_OPTIONS=" \
     --with-http_realip_module \ 
     --with-http_sub_module \ 
     --with-http_geoip_module \ 
+    --with-http_v2_module \ 
     --with-pcre=${OPENWAF_PREFIX}/pcre-${PCRE_VERSION} \ 
     "
     

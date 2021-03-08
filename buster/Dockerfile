@@ -1,11 +1,11 @@
 ################################################
 # Dockerfile to build OpenWAF container images #
-# Based on stretch                             #
+# Based on buster                              #
 # https://github.com/titansec/docker-openwaf   #
 ################################################
 
-#Set the base image to stretch
-FROM debian:stretch
+#Set the base image to buster
+FROM debian:buster
 
 #File Author
 MAINTAINER Miracle
@@ -25,6 +25,7 @@ ARG OPENWAF_CONFIG_OPTIONS=" \
     --with-http_realip_module \ 
     --with-http_sub_module \ 
     --with-http_geoip_module \ 
+    --with-http_v2_module \ 
     --with-openssl=${OPENWAF_PREFIX}/openssl-${OPENSSL_VERSION} \ 
     --with-pcre=${OPENWAF_PREFIX}/pcre-${PCRE_VERSION} \ 
     "
@@ -35,7 +36,7 @@ RUN apt-get update \
 #1.Install openrestry related
 RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncurses5-dev libreadline-dev -y \
     && cd ${OPENWAF_PREFIX} \
-    && wget http://www.over-yonder.net/~fullermd/projects/libcidr/libcidr-${CIDR_VERSION}.tar.xz \ 
+    && wget http://www.over-yonder.net/~fullermd/projects/libcidr/libcidr-${CIDR_VERSION}.tar.xz \
     && wget https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz \
     && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
     && wget https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz \
@@ -45,9 +46,10 @@ RUN apt-get install gcc make perl build-essential zlib1g-dev libgeoip-dev libncu
     && tar -zxvf openresty-${OPENRESTY_VERSION}.tar.gz \
     && cd ${OPENWAF_PREFIX}/libcidr-${CIDR_VERSION} \
     && make && make install
+    
 
 #2. Install OpenWAF
-RUN cd ${OPENWAF_PREFIX} \ 
+RUN cd ${OPENWAF_PREFIX} \  
     && apt-get install git swig -y \ 
     && git clone --branch ${OPENWAF_VERSION} https://github.com/titansec/OpenWAF.git \ 
     && mv ${OPENWAF_PREFIX}/OpenWAF/lib/openresty/ngx_openwaf.conf /etc \ 
@@ -68,13 +70,14 @@ RUN cd ${OPENWAF_PREFIX}/openresty-${OPENRESTY_VERSION}/ \
 RUN cd ${OPENWAF_PREFIX} \ 
     && rm -rf \ 
         pcre-${PCRE_VERSION} \ 
-        libcidr-${CIDR_VERSION} \ 
+        libcidr-${CIDR_VERSION} \
         openssl-${OPENSSL_VERSION} \ 
         pcre-${PCRE_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION} \ 
         openssl-${OPENSSL_VERSION}.tar.gz \ 
         openresty-${OPENRESTY_VERSION}.tar.gz
 
+# Add additional binaries into PATH for convenience
 ENV PATH=${OPENRESTY_PREFIX}/nginx/sbin/:${OPENRESTY_PREFIX}/bin/:$PATH
 
 CMD ["openresty", "-c", "/etc/ngx_openwaf.conf", "-g", "daemon off;"]
